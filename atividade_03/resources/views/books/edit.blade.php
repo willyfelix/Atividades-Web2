@@ -4,7 +4,7 @@
 <div class="container">
     <h1 class="my-4">Editar Livro</h1>
 
-    <form action="{{ route('books.update', $book) }}" method="POST">
+    <form action="{{ route('books.update', $book) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -62,6 +62,23 @@
                 @endforeach
             </select>
             @error('category_id')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="cover_image" class="form-label">Imagem de Capa (Opcional)</label>
+            @if($book->cover_image)
+                <div class="mb-2">
+                    <small class="text-muted">Imagem atual:</small><br>
+                    <img src="{{ $book->cover_image_url }}" alt="Capa atual" style="max-width: 150px; max-height: 200px;" class="img-thumbnail">
+                </div>
+            @endif
+            <input type="file" class="form-control @error('cover_image') is-invalid @enderror" id="cover_image" name="cover_image" accept="image/*">
+            <div class="form-text">Formatos aceitos: JPEG, PNG, JPG, GIF. Tamanho máximo: 2MB. Deixe vazio para manter a imagem atual.</div>
+            @error('cover_image')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>

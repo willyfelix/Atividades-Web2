@@ -9,21 +9,28 @@
             <strong>Título:</strong> {{ $book->title }}
         </div>
         <div class="card-body">
-            <p><strong>Autor:</strong>
-                <a href="{{ route('authors.show', $book->author->id) }}">
-                    {{ $book->author->name }}
-                </a>
-            </p>
-            <p><strong>Editora:</strong>
-                <a href="{{ route('publishers.show', $book->publisher->id) }}">
-                    {{ $book->publisher->name }}
-                </a>
-            </p>
-            <p><strong>Categoria:</strong>
-                <a href="{{ route('categories.show', $book->category->id) }}">
-                    {{ $book->category->name }}
-                </a>
-            </p>
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="{{ $book->cover_image_url }}" alt="Capa do livro" style="max-width: 200px; max-height: 300px; object-fit: cover;" class="img-thumbnail">
+                </div>
+                <div class="col-md-9">
+                    <p><strong>Autor:</strong>
+                        <a href="{{ route('authors.show', $book->author->id) }}">
+                            {{ $book->author->name }}
+                        </a>
+                    </p>
+                    <p><strong>Editora:</strong>
+                        <a href="{{ route('publishers.show', $book->publisher->id) }}">
+                            {{ $book->publisher->name }}
+                        </a>
+                    </p>
+                    <p><strong>Categoria:</strong>
+                        <a href="{{ route('categories.show', $book->category->id) }}">
+                            {{ $book->category->name }}
+                        </a>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 

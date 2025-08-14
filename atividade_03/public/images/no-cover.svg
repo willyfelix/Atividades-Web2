@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="200" viewBox="0 0 150 200">
+  <rect width="150" height="200" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2"/>
+  <circle cx="75" cy="100" r="30" fill="none" stroke="#6c757d" stroke-width="2"/>
+  <line x1="55" y1="80" x2="95" y2="120" stroke="#6c757d" stroke-width="2"/>
+  <text x="75" y="160" text-anchor="middle" fill="#6c757d" font-size="12" font-family="Arial, sans-serif">Sem Capa</text>
+</svg>

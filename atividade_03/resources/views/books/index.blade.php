@@ -21,6 +21,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Capa</th>
                 <th>Título</th>
                 <th>Autor</th>
                 <th>Ações</th>
@@ -30,6 +31,9 @@
             @forelse($books as $book)
                 <tr>
                     <td>{{ $book->id }}</td>
+                    <td>
+                        <img src="{{ $book->cover_image_url }}" alt="Capa do livro" style="width: 50px; height: 70px; object-fit: cover;" class="img-thumbnail">
+                    </td>
                     <td>{{ $book->title }}</td>
                     <td>{{ $book->author->name }}</td>
                     <td>
