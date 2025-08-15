@@ -56,6 +56,13 @@
         </div>
     </div>
 
+    @if($user->debit > 0)
+        <form action="{{ route('users.clearDebit', $user) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-warning">Zerar Débito</button>
+        </form>
+    @endif
+
     <a href="{{ route('users.index') }}" class="btn btn-secondary mt-4">
         <i class="bi bi-arrow-left"></i> Voltar
     </a>

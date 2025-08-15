@@ -36,6 +36,12 @@ class BorrowingController extends Controller
                 ->with('error', 'Limite de 5 livros emprestados atingido.');
         }
 
+        $user = User::find($request->user_id);
+        if ($user->debit > 0) {
+            return redirect()->route('books.show', $book)
+                ->with('error', 'Você possui débito em aberto. Regularize antes de novos empréstimos.');
+        }
+
         Borrowing::create([
             'user_id' => $request->user_id,
             'book_id' => $book->id,
@@ -47,11 +53,25 @@ class BorrowingController extends Controller
 
     public function returnBook(Borrowing $borrowing)
     {
+        $diasEmprestimo = $borrowing->borrowed_at->diffInDays(now());
+        $multa = 0;
+
+        if ($diasEmprestimo > 15) {
+            $diasAtraso = $diasEmprestimo - 15;
+            $multa = $diasAtraso * 0.5;
+
+            // Atualiza o débito do usuário
+            $user = $borrowing->user;
+            $user->debit += $multa;
+            $user->save();
+        }
+
         $borrowing->update([
             'returned_at' => now(),
         ]);
 
-        return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Devolução registrada com sucesso.');
+        return redirect()->route('books.show', $borrowing->book_id)
+            ->with('success', $multa > 0 ? "Devolução registrada com multa de R$ " . number_format($multa, 2, ',', '.') : 'Devolução registrada com sucesso.');
     }
 
     public function userBorrowings(User $user)

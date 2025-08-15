@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-         'role',
+        'role',
+        'debit',
     ];
 
     /**
@@ -52,5 +53,23 @@ class User extends Authenticatable
         return $this->belongsToMany(Book::class, 'borrowings')
                 ->withPivot('id', 'borrowed_at', 'returned_at')
                 ->withTimestamps();
+    }
+
+    // Relacionamento direto com empréstimos
+    public function borrowings()
+    {
+        return $this->hasMany(Borrowing::class);
+    }
+
+    // Verifica se o usuário tem débito
+    public function hasDebit()
+    {
+        return $this->debit > 0;
+    }
+
+    // Verifica se o usuário pode emprestar
+    public function canBorrow()
+    {
+        return $this->debit == 0;
     }
 }

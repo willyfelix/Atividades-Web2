@@ -73,3 +73,7 @@ Route::middleware(['auth', 'role:admin,bibliotecario'])->group(function () {
 Route::middleware(['auth', 'role:cliente'])->group(function () {
     Route::get('books', [BookController::class, 'index']);
 });
+
+Route::middleware(['auth', 'role:bibliotecario,admin'])->group(function () {
+    Route::post('users/{user}/clear-debit', [UserController::class, 'clearDebit'])->name('users.clearDebit');
+});

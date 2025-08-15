@@ -42,4 +42,15 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('users.index')->with('success', 'Papel atualizado!');
     }
+    public function clearDebit(User $user)
+    {
+        $user->debit = 0;
+        $user->save();
+        return back()->with('success', 'Débito zerado com sucesso!');
+    }
+    public function usersWithDebit()
+    {
+        $users = User::where('debit', '>', 0)->get();
+        return view('users.debits', compact('users'));
+    }
 }
