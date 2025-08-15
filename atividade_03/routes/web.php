@@ -19,9 +19,26 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('categories', CategoryController::class);
-Route::resource('authors', AuthorController::class);
-Route::resource('publishers', PublisherController::class);
+
+// Rotas que só o admin pode acessar
+Route::middleware(['role:admin'])->group(function () {
+    Route::resource('users', UserController::class); // admin pode editar papéis
+});
+
+// Rotas que admin e bibliotecário podem acessar
+Route::middleware(['role:admin,bibliotecario'])->group(function () {
+    Route::resource('books', BookController::class)->except(['index', 'show']);
+    Route::resource('publishers', PublisherController::class)->except(['index', 'show']);
+    Route::resource('categories', CategoryController::class)->except(['index', 'show']);
+    Route::resource('authors', AuthorController::class)->except(['index', 'show']);
+});
+
+// Rotas de visualização para todos os papéis
+Route::middleware(['role:admin,bibliotecario,cliente'])->group(function () {
+    Route::get('books', [BookController::class, 'index']);
+    Route::get('books/{book}', [BookController::class, 'show']);
+    // ...outras rotas de visualização...
+});
 
 // Rotas para criação de livros
 Route::get('/books/create-id-number', [BookController::class, 'createWithId'])->name('books.create.id');
@@ -43,3 +60,16 @@ Route::get('/users/{user}/borrowings', [BorrowingController::class, 'userBorrowi
 
 // Rota para registrar a devolução
 Route::patch('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.return');
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('usuarios', UserController::class);
+});
+
+Route::middleware(['auth', 'role:admin,bibliotecario'])->group(function () {
+    Route::resource('books', BookController::class);
+    Route::resource('publisher', PublisherController::class);
+});
+
+Route::middleware(['auth', 'role:cliente'])->group(function () {
+    Route::get('books', [BookController::class, 'index']);
+});
