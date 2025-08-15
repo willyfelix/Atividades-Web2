@@ -16,6 +16,16 @@ class BorrowingController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
+        // Verifica se o livro já está emprestado e não devolvido
+        $emprestimoAberto = Borrowing::where('book_id', $book->id)
+            ->whereNull('returned_at')
+            ->exists();
+
+        if ($emprestimoAberto) {
+            return redirect()->route('books.show', $book)
+                ->with('error', 'Este livro já está emprestado.');
+        }
+
         Borrowing::create([
             'user_id' => $request->user_id,
             'book_id' => $book->id,
